@@ -10,7 +10,7 @@ function Router(){
     return(
         <Stack.Navigator>
            <Stack.Screen name="Home" component={Home}/> 
-           <Stack.Screen name="Sobre" component={Details}/> 
+           <Stack.Screen name="Detalhes" component={Details}/> 
         </Stack.Navigator>
     )
 }
