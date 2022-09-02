@@ -1,25 +1,55 @@
+import { useState } from "react";
 import {View, Text, StyleSheet, ScrollView, TouchableOpacity} from "react-native"
-
 import { Ionicons } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
-
 import {useNavigation} from "@react-navigation/native"
+//componnets
+import AddMoney from "../../components/AddMoney";
+
+// array 
+const extrats = [
+    {
+        id: 1,
+        value: 254.97,
+        active: false
+    },
+    {
+        id: 2,
+        value: 3547.95,
+        active: true
+    },
+    {
+        id: 3,
+        value: 574.97,
+        active: false
+    }
+]
 
 function Home(){
 
-    const navigation = useNavigation()
+    const [addMoney, setAddMoney] = useState(false)
+
+    const [valueActive, setValueActive] = useState<number>(0)
 
     return (
         <ScrollView>
             <View style={styles.container}>
-
+                {addMoney && 
+                    <AddMoney 
+                        addmoney={addMoney} 
+                        setAddMoney={setAddMoney} 
+                        setValue={setValueActive}
+                    />
+                }
                 <View style={styles.header}>
                     <Text style={styles.title}>My Balance</Text>
                 </View>
                 <View style={styles.card}>
                     <View style={styles.headerCardContainer}>
                         <Text style={styles.titleCard}>ENTRADA</Text>
-                        <Ionicons name="add-circle" size={24} color="#007571" />
+                        <TouchableOpacity onPress={() => setAddMoney(!addMoney)}>
+                            <Ionicons name="add-circle" size={24} color="#007571" />
+                        </TouchableOpacity>
                     </View>
                     <Text style={styles.priceCard}>R$ 1854,99</Text>
                 </View>
@@ -41,25 +71,19 @@ function Home(){
 
             <View style={styles.extratos}>
                 <View style={styles.extratosHeader}>
-                    <Text>Descrição</Text>
                     <Text>Valor</Text>
                     <Text>Tipo</Text>
                 </View>
-                <TouchableOpacity style={styles.extratosInfo} onPress={() => alert("Click")}>
-                    <Text>Conta de Luz</Text>
-                    <Text>R$ 254,97</Text>
-                    <Entypo name="circle-with-minus" size={24} color="red" />
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.extratosInfo}>
-                    <Text>Salario</Text>
-                    <Text>R$ 3547,95</Text>
-                    <Ionicons name="add-circle" size={24} color="#007571" />
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.extratosInfo}>
-                    <Text>Aluguel</Text>
-                    <Text>R$ 574,97</Text>
-                    <Entypo name="circle-with-minus" size={24} color="red" />
-                </TouchableOpacity>
+                {extrats && extrats.map(itens => (
+                    <TouchableOpacity 
+                        style={styles.extratosInfo} 
+                        onPress={() => alert(`${itens.active ? 'Entrada' : 'Saida'} de R$ ${itens.value}`)} 
+                        key={itens.id}
+                    >
+                        <Text>R$ {itens.value}</Text>
+                        <Entypo name={itens.active ? "circle-with-plus" : "circle-with-minus"} size={24} color={itens.active ? "#007571" : "red"} />
+                    </TouchableOpacity>
+                ))}
             </View>
         </ScrollView>
     )
